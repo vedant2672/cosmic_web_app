@@ -45,7 +45,7 @@ export default function EventList({ grouped, selections, onSelect, onOpen }) {
             />
             {formatReadableDate(date, { dayOfWeek: true })}
           </Typography>
-          <Grid container spacing={3} justifyContent="center">
+          <Grid container spacing={{ xs: 2, sm: 3 }} justifyContent="center">
             {grouped[date].map((neo) => (
               <Grid key={neo.id} item xs={12} sm={6} md={6} lg={4} xl={4}>
                 <EventCard

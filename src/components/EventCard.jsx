@@ -38,8 +38,8 @@ export default function EventCard({ neo, selected, onSelect, onOpen }) {
         backgroundRepeat: "no-repeat",
         backgroundClip: "padding-box",
         borderRadius: 3,
-        height: 340,
-        minHeight: 320,
+        height: { xs: 300, sm: 320, md: 340 },
+        minHeight: { xs: 280, sm: 300 },
         display: "flex",
         transition:
           "transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, background 180ms ease, backdrop-filter 180ms ease",
@@ -75,7 +75,7 @@ export default function EventCard({ neo, selected, onSelect, onOpen }) {
           flexDirection: "column",
           gap: 1.25,
           width: "100%",
-          pt: 1.5,
+          pt: { xs: 1, sm: 1.25, md: 1.5 },
         }}
       >
         <Box

@@ -40,16 +40,17 @@ export default function FilterBar({
   return (
     <Box
       display="flex"
-      flexWrap="nowrap"
-      alignItems="center"
+      flexWrap={{ xs: "wrap", md: "nowrap" }}
+      alignItems={{ xs: "stretch", md: "center" }}
       className="glass-card"
       sx={{
         my: 2,
         p: 2,
         overflowX: "visible",
         gap: { xs: 1, sm: 1.5, md: 2 },
+        rowGap: { xs: 1.25, sm: 1.5 },
         "& > *": { flex: "0 0 auto" },
-        justifyContent: "space-between",
+        justifyContent: { xs: "flex-start", md: "space-between" },
         border: "1px solid var(--card-border)",
         borderRadius: 2,
         backdropFilter: "blur(10px)",
@@ -71,11 +72,12 @@ export default function FilterBar({
         InputLabelProps={{ shrink: true }}
         sx={{
           width: {
-            xs: "clamp(150px, 24vw, 220px)",
+            xs: "100%",
+            sm: "clamp(180px, 36vw, 260px)",
             md: "clamp(180px, 20vw, 240px)",
           },
           minWidth: 150,
-          flex: "1 1 auto",
+          flex: { xs: "1 1 100%", sm: "1 1 auto" },
           flexShrink: 1,
           "& .MuiInputBase-root": { bgcolor: "rgba(255,255,255,0.06)" },
           "& fieldset": { borderColor: "var(--card-border)" },
@@ -96,11 +98,12 @@ export default function FilterBar({
         InputLabelProps={{ shrink: true }}
         sx={{
           width: {
-            xs: "clamp(150px, 24vw, 220px)",
+            xs: "100%",
+            sm: "clamp(180px, 36vw, 260px)",
             md: "clamp(180px, 20vw, 240px)",
           },
           minWidth: 150,
-          flex: "1 1 auto",
+          flex: { xs: "1 1 100%", sm: "1 1 auto" },
           flexShrink: 1,
           "& .MuiInputBase-root": { bgcolor: "rgba(255,255,255,0.06)" },
           "& fieldset": { borderColor: "var(--card-border)" },
@@ -122,9 +125,10 @@ export default function FilterBar({
         }
         label="Hazardous only"
         sx={{
-          ml: 1,
-          px: 1,
+          ml: { xs: 0, sm: 1 },
+          px: { xs: 0, sm: 1 },
           borderRadius: 1,
+          width: { xs: "100%", sm: "auto" },
           "& .MuiFormControlLabel-label": {
             color: "var(--text)",
             whiteSpace: "nowrap",
@@ -135,7 +139,11 @@ export default function FilterBar({
       <Divider
         flexItem
         orientation="vertical"
-        sx={{ borderColor: "var(--card-border)", mx: 0.5 }}
+        sx={{
+          borderColor: "var(--card-border)",
+          mx: 0.5,
+          display: { xs: "none", sm: "block" },
+        }}
       />
 
       <TextField
@@ -166,11 +174,12 @@ export default function FilterBar({
         onChange={(e) => onSortChange?.(e.target.value)}
         sx={{
           width: {
-            xs: "clamp(170px, 26vw, 240px)",
+            xs: "100%",
+            sm: "clamp(200px, 40vw, 280px)",
             md: "clamp(200px, 22vw, 260px)",
           },
           minWidth: 170,
-          flex: "1 1 auto",
+          flex: { xs: "1 1 100%", sm: "1 1 auto" },
           flexShrink: 1,
           "& .MuiInputBase-root": { bgcolor: "rgba(255,255,255,0.06)" },
           "& fieldset": { borderColor: "var(--card-border)" },
@@ -190,7 +199,7 @@ export default function FilterBar({
           variant="contained"
           startIcon={<SearchIcon />}
           onClick={onSearch}
-          sx={btnContainedAccent}
+          sx={{ ...btnContainedAccent, width: { xs: "100%", sm: "auto" } }}
         >
           Search
         </Button>
@@ -201,7 +210,7 @@ export default function FilterBar({
         variant="outlined"
         startIcon={<RefreshIcon />}
         onClick={onReload}
-        sx={btnOutlinedAccent}
+        sx={{ ...btnOutlinedAccent, width: { xs: "100%", sm: "auto" } }}
       >
         Reload
       </Button>
@@ -210,7 +219,7 @@ export default function FilterBar({
         variant="contained"
         startIcon={<RocketLaunchIcon />}
         onClick={onLoadMore}
-        sx={btnContainedAccent}
+        sx={{ ...btnContainedAccent, width: { xs: "100%", sm: "auto" } }}
       >
         Load More
       </Button>

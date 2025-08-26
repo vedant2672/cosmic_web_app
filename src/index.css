@@ -129,3 +129,14 @@ label {
 .MuiSvgIcon-root {
   color: var(--text);
 }
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  :root {
+    background-attachment: scroll; /* avoid jank on mobile */
+    background-size: auto 120%;
+  }
+  button {
+    padding: 0.55em 1.1em;
+  }
+}
