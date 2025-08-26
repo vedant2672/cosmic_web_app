@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../components/Header";
 import {
   ResponsiveContainer,
@@ -20,6 +21,8 @@ import {
 import { averageKmDiameter, closestApproach } from "../services/nasaApi";
 
 export default function Compare({ selections }) {
+  const isXs = useMediaQuery("(max-width:600px)");
+  const isSm = useMediaQuery("(max-width:900px)");
   const items = useMemo(
     () => Object.values(selections).filter(Boolean),
     [selections]
@@ -107,7 +110,7 @@ export default function Compare({ selections }) {
         flexWrap: "wrap",
         justifyContent: "center",
         alignItems: "center",
-        gap: 2,
+        gap: 1.25,
         px: 1,
         pb: 1,
         color: "var(--text)",
@@ -127,7 +130,7 @@ export default function Compare({ selections }) {
               boxShadow: `0 0 6px ${entry.color}`,
             }}
           />
-          <Typography variant="body2" sx={{ opacity: 0.9 }}>
+          <Typography variant="body2" sx={{ opacity: 0.9, fontSize: isXs ? 12 : undefined }}>
             {entry.value}
           </Typography>
         </Box>
@@ -138,9 +141,9 @@ export default function Compare({ selections }) {
   return (
     <>
       <Header selectionsCount={items.length} />
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+      <Container maxWidth="lg" sx={{ py: 3, px: { xs: 2, sm: 3 } }}>
         <Stack spacing={4}>
-          <Typography variant="h5">Compare Selected NEOs</Typography>
+          <Typography variant={isXs ? "h6" : "h5"}>Compare Selected NEOs</Typography>
           {items.length === 0 && (
             <Typography variant="body1" sx={{ opacity: 0.9 }}>
               No selections. Go back and select some NEOs.
@@ -149,13 +152,13 @@ export default function Compare({ selections }) {
 
           {items.length > 0 && (
             <Stack spacing={3}>
-              <Typography variant="h6">
+              <Typography variant={isXs ? "subtitle1" : "h6"}>
                 Miss Distance (km) vs Velocity (km/s)
               </Typography>
               <Paper
                 sx={{
-                  p: 2,
-                  pl: 4,
+                  p: { xs: 1.25, sm: 2 },
+                  pl: { xs: 2, sm: 4 },
                   border: "1px solid var(--card-border)",
                   borderRadius: 2,
                   backdropFilter: "blur(10px)",
@@ -163,54 +166,69 @@ export default function Compare({ selections }) {
                     "linear-gradient(180deg, rgba(16,22,33,0.70), rgba(16,22,33,0.55))",
                 }}
               >
-                <Typography variant="h6" sx={{ mb: 1.5 }}>
+                <Typography variant={isXs ? "subtitle1" : "h6"} sx={{ mb: 1.5 }}>
                   Miss Distance vs Velocity
                 </Typography>
-                <ResponsiveContainer width="100%" height={340}>
+                <ResponsiveContainer width="100%" height={isXs ? 260 : isSm ? 320 : 340}>
                   <LineChart
                     data={distanceData}
-                    margin={{ top: 48, right: 16, left: 120, bottom: 8 }}
+                    margin={{
+                      top: isXs ? 24 : 48,
+                      right: 12,
+                      left: isXs ? 60 : 120,
+                      bottom: isXs ? 8 : 8,
+                    }}
                   >
                     <CartesianGrid stroke="rgba(255,255,255,0.08)" />
                     <XAxis
                       dataKey="name"
-                      interval={0}
-                      angle={-20}
+                      interval={isXs ? "preserveStartEnd" : 0}
+                      angle={isXs ? -25 : -20}
                       textAnchor="end"
-                      height={60}
-                      tick={{ fill: "var(--text)", fontSize: 12 }}
+                      height={isXs ? 46 : 60}
+                      tick={{ fill: "var(--text)", fontSize: isXs ? 10 : 12 }}
                     />
                     <YAxis
                       yAxisId="left"
-                      width={90}
-                      tick={{ fill: "var(--text)", fontSize: 12 }}
-                      label={{
-                        value: "Distance (km)",
-                        angle: -90,
-                        position: "left",
-                        offset: 10,
-                        fill: "var(--text)",
-                      }}
+                      width={isXs ? 60 : 90}
+                      tick={{ fill: "var(--text)", fontSize: isXs ? 10 : 12 }}
+                      label={
+                        isXs
+                          ? undefined
+                          : {
+                              value: "Distance (km)",
+                              angle: -90,
+                              position: "left",
+                              offset: 10,
+                              fill: "var(--text)",
+                            }
+                      }
                     />
                     <YAxis
                       yAxisId="right"
                       orientation="right"
-                      width={80}
-                      tick={{ fill: "var(--text)", fontSize: 12 }}
-                      label={{
-                        value: "Velocity (km/s)",
-                        angle: 90,
-                        position: "right",
-                        offset: 10,
-                        fill: "var(--text)",
-                      }}
+                      width={isXs ? 60 : 80}
+                      tick={{ fill: "var(--text)", fontSize: isXs ? 10 : 12 }}
+                      label={
+                        isXs
+                          ? undefined
+                          : {
+                              value: "Velocity (km/s)",
+                              angle: 90,
+                              position: "right",
+                              offset: 10,
+                              fill: "var(--text)",
+                            }
+                      }
                     />
                     <Tooltip content={<CustomTooltip context="dist-vel" />} />
-                    <Legend
-                      verticalAlign="top"
-                      align="center"
-                      content={<CustomLegend />}
-                    />
+                    {!isXs && (
+                      <Legend
+                        verticalAlign="top"
+                        align="center"
+                        content={<CustomLegend />}
+                      />
+                    )}
                     <Line
                       yAxisId="left"
                       type="monotone"
@@ -245,7 +263,7 @@ export default function Compare({ selections }) {
 
               <Paper
                 sx={{
-                  p: 2,
+                  p: { xs: 1.25, sm: 2 },
                   border: "1px solid var(--card-border)",
                   borderRadius: 2,
                   backdropFilter: "blur(10px)",
@@ -253,38 +271,44 @@ export default function Compare({ selections }) {
                     "linear-gradient(180deg, rgba(16,22,33,0.70), rgba(16,22,33,0.55))",
                 }}
               >
-                <Typography variant="h6" sx={{ mb: 1.5 }}>
+                <Typography variant={isXs ? "subtitle1" : "h6"} sx={{ mb: 1.5 }}>
                   Average Diameter
                 </Typography>
-                <ResponsiveContainer width="100%" height={340}>
+                <ResponsiveContainer width="100%" height={isXs ? 260 : isSm ? 320 : 340}>
                   <BarChart
                     data={sizeData}
-                    margin={{ top: 48, right: 16, left: 24, bottom: 8 }}
+                    margin={{ top: isXs ? 24 : 48, right: 12, left: isXs ? 12 : 24, bottom: 8 }}
                   >
                     <CartesianGrid stroke="rgba(255,255,255,0.08)" />
                     <XAxis
                       dataKey="name"
-                      interval={0}
-                      angle={-20}
+                      interval={isXs ? "preserveStartEnd" : 0}
+                      angle={isXs ? -25 : -20}
                       textAnchor="end"
-                      height={60}
-                      tick={{ fill: "var(--text)", fontSize: 12 }}
+                      height={isXs ? 46 : 60}
+                      tick={{ fill: "var(--text)", fontSize: isXs ? 10 : 12 }}
                     />
                     <YAxis
-                      tick={{ fill: "var(--text)", fontSize: 12 }}
-                      label={{
-                        value: "Diameter (km)",
-                        angle: -90,
-                        position: "insideLeft",
-                        fill: "var(--text)",
-                      }}
+                      tick={{ fill: "var(--text)", fontSize: isXs ? 10 : 12 }}
+                      label={
+                        isXs
+                          ? undefined
+                          : {
+                              value: "Diameter (km)",
+                              angle: -90,
+                              position: "insideLeft",
+                              fill: "var(--text)",
+                            }
+                      }
                     />
                     <Tooltip content={<CustomTooltip context="diam" />} />
-                    <Legend
-                      verticalAlign="top"
-                      align="center"
-                      content={<CustomLegend />}
-                    />
+                    {!isXs && (
+                      <Legend
+                        verticalAlign="top"
+                        align="center"
+                        content={<CustomLegend />}
+                      />
+                    )}
                     <defs>
                       <linearGradient
                         id="diamGradient"
