@@ -34,6 +34,9 @@ export function AuthProvider({ children }) {
     if (!supabase) return null;
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "github",
+      options: {
+        redirectTo: `${window.location.origin}/`,
+      },
     });
     if (error) throw error;
     return data;

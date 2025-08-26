@@ -2,6 +2,13 @@ const API_BASE = "https://api.nasa.gov";
 const NEO_FEED = "/neo/rest/v1/feed";
 
 const API_KEY = import.meta.env.VITE_NASA_API_KEY || "DEMO_KEY";
+if (API_KEY === "DEMO_KEY") {
+  // Helpful hint in devtools if env var isn't wired in deployed builds
+  // Note: NASA requires API key via query param; it's public by design.
+  console.warn(
+    "NASA API: Using DEMO_KEY. Set VITE_NASA_API_KEY in your environment (Vercel > Settings > Environment Variables) and redeploy."
+  );
+}
 
 // Simple in-memory cache with TTL to reduce rate-limit issues and duplicate calls
 const _cache = new Map(); // key: url -> { expiresAt: number, data: any }
